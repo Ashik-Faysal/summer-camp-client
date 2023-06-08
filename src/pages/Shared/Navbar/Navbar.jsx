@@ -17,20 +17,15 @@ const NavBar = () => {
       <li>
         <Link to="/">Home</Link>
       </li>
-      
-      {user ? (
-        <>
-          <button onClick={handleLogOut} className="btn btn-ghost">
-            LogOut
-          </button>
-        </>
-      ) : (
-        <>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        </>
-      )}
+      <li>
+        <Link>Instructors</Link>
+      </li>
+      <li>
+        <Link>Classes</Link>
+      </li>
+      <li>
+        <Link>DashBoard</Link>
+      </li>
     </>
   );
 
@@ -68,7 +63,28 @@ const NavBar = () => {
           <ul className="menu menu-horizontal px-1">{navOptions}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Get started</a>
+          {user ? (
+            <>
+              <div className="flex">
+                <img
+                  className="rounded-full mr-2"
+                  src={user && user.photoURL ? user.photoURL : avatarImg}
+                  alt="profile"
+                  height="30"
+                  width="30"
+                />
+                <button onClick={handleLogOut} className="btn btn-ghost">
+                  LogOut
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            </>
+          )}
         </div>
       </div>
     </>

@@ -1,46 +1,49 @@
+
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [error, setError] = useState(null);
-
-  const { signIn, signInWithGoogle, upDateProfile } = useContext(AuthContext);
-  const navigate = useNavigate();
+const navigate = useNavigate();
+  const { signIn, googleSignIn, updateUserProfile } = useContext(AuthContext);
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
-  const handleLogin = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      return;
-    }
-    signIn(email, password)
-      .then((result) => {
-        const loggedUser = result.user;
-        upDateProfile(email, photoURL);
-        form.reset();
-        setError("");
-        navigate(from);
-      })
-      .catch((error) => setError(error.message));
-  };
+   const handleLogin = (event) => {
+     event.preventDefault();
+     const form = event.target;
+     const email = form.email.value;
+     const password = form.password.value;
+     console.log(email, password);
+     signIn(email, password).then((result) => {
+       const user = result.user;
+       console.log(user);
+       Swal.fire({
+         title: "User Login Successful.",
+         showClass: {
+           popup: "animate__animated animate__fadeInDown",
+         },
+         hideClass: {
+           popup: "animate__animated animate__fadeOutUp",
+         },
+       });
+       navigate(from, { replace: true });
+     });
+   };
   return (
     <>
       <div className="hero min-h-screen bg-stone-200">
         <div className="md:hero-content">
           <div>
             <iframe
-              src="https://embed.lottiefiles.com/animation/27315"
+              src="https://embed.lottiefiles.com/animation/38435"
               width="700"
               height="450"
             ></iframe>
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm bg-black  shadow-2xl">
+          <div className="card flex-shrink-0 w-full max-w-sm bg-stone-700  shadow-2xl">
             <h1 className="text-5xl font-bold text-center text-stone-500">
               Please Login !
             </h1>
@@ -81,7 +84,7 @@ const Login = () => {
               <div className="flex gap-4 mx-auto">
                 <button
                   type="button"
-                  onClick={signInWithGoogle}
+                  onClick={googleSignIn}
                   className="btn btn-outline btn-accent mt-2"
                 >
                   <img
@@ -100,7 +103,7 @@ const Login = () => {
             <span className="p-5 text-white">
               New to this Website?
               <Link
-                to="/register"
+                to="/signup"
                 className="label-text-alt link link-hover text-white"
               >
                 Please Register..
