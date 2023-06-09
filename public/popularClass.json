@@ -1,0 +1,33 @@
+ [
+    {
+      "className": "Yoga Class",
+      "classPicture": "https://images.unsplash.com/photo-1588286840104-8957b019727f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8WW9nYSUyMENsYXNzfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 50
+    },
+    {
+      "className": "Dance Class",
+      "classPicture": "https://images.unsplash.com/photo-1604954055722-7f80571fbfc3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGFuY2UlMjBjbGFzc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 45
+    },
+    {
+      "className": "Cooking Class",
+      "classPicture": "https://images.unsplash.com/photo-1615224299941-04a854c101d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fENvb2tpbmclMjBDbGFzc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 40
+    },
+    {
+      "className": "Art Class",
+      "classPicture": "https://images.unsplash.com/photo-1508269151431-a34449ca161d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QXJ0JTIwQ2xhc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 35
+    },
+    {
+      "className": "Music Class",
+      "classPicture": "https://images.unsplash.com/photo-1540593463874-59835505e99d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8TXVzaWMlMjBDbGFzc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 30
+    },
+    {
+      "className": "Fitness Class",
+      "classPicture": "https://images.unsplash.com/photo-1628703222724-8607d74e3510?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Rml0bmVzc0NsYXNzfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+      "NumberOfStudents": 25
+    }
+  ]
+
