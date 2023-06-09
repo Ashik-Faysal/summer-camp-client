@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 
@@ -31,7 +30,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="navbar fixed z-10 bg-opacity-30 max-w-screen-xl bg-black text-white">
+      <div className="navbar fixed z-10 bg-opacity-30 max-w-screen-2xl bg-black text-white">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -68,7 +67,7 @@ const NavBar = () => {
               <div className="flex">
                 <img
                   className="rounded-full mr-2"
-                  src={user && user.photoURL ? user.photoURL : avatarImg}
+                  src={user && user.photoURL ? user.photoURL : ""}
                   alt="profile"
                   height="30"
                   width="30"

@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const SignUp = () => {
   const { user, createUser, updateUserProfile } = useContext(AuthContext);
+  const [passwordError, setPasswordError] = useState("");
+  const navigate = useNavigate()
 
   const handleRegister = (event) => {
     event.preventDefault();
@@ -14,16 +16,35 @@ const SignUp = () => {
     const photoURL = form.photoURL.value;
     console.log(name, email, password, photoURL);
 
+    // Password validation checks
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      setPasswordError("Password must contain at least one capital letter.");
+      return;
+    }
+
+    if (!/[!@#$%^&*]/.test(password)) {
+      setPasswordError("Password must contain at least one special character.");
+      return;
+    }
+
+    // Clear password error if all checks pass
+    setPasswordError("");
+
     createUser(email, password)
       .then((result) => {
         updateUserProfile(name, photoURL);
         const loggedUser = result.user;
         console.log(loggedUser);
+        navigate("/") // Navigate to the "/" page
         form.reset();
       })
       .catch((error) => console.log(error));
   };
-
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col">
@@ -90,6 +111,9 @@ const SignUp = () => {
                   className="input input-bordered"
                   required
                 />
+                {passwordError && (
+                  <p className="text-red-500">{passwordError}</p>
+                )}
                 <label className="label">
                   <Link
                     to="/login"
