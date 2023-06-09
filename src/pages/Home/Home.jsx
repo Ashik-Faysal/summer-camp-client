@@ -1,9 +1,15 @@
+import PopularClasses from "./PopularClasses";
+import PopularInstructors from "./PopularInstructors";
+import Slider from "./Slider";
+
 const Home = () => {
-    return (
-      <div>
-        <h2 className="text-6xl">This is home </h2>
-      </div>
-    );
+  return (
+    <div>
+      <Slider />
+      <PopularClasses />
+      <PopularInstructors />
+    </div>
+  );
 };
 
 export default Home;
