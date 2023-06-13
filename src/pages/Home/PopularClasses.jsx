@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const PopularClasses = () => {
   const [classes, setClasses] = useState([]);
@@ -17,6 +18,9 @@ const PopularClasses = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Summer camp | Home</title>
+      </Helmet>
       <h1 className="text-5xl font-bold text-orange-500 my-8 text-center">
         Popular Class
       </h1>
