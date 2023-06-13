@@ -1,10 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
 
+
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
+    const [selectedClasses, setSelectedClasses] = useState([]);
 
+ useEffect(() => {
+   const storedClasses =
+     JSON.parse(localStorage.getItem("selectedClasses")) || [];
+   setSelectedClasses(storedClasses);
+ }, []);
   const handleLogOut = () => {
     logOut()
       .then(() => {})
@@ -12,7 +19,7 @@ const NavBar = () => {
   };
 
   const navOptions = (
-    <>
+    <div className="md:flex items-center">
       <li>
         <Link to="/">Home</Link>
       </li>
@@ -20,12 +27,15 @@ const NavBar = () => {
         <Link to="/instructor">Instructors</Link>
       </li>
       <li>
-        <Link to="/classes">Classes</Link>
+        <Link to="/classes">
+          Classes
+          <div className="badge badge-secondary">{selectedClasses.length}</div>
+        </Link>
       </li>
       <li>
         <Link>DashBoard</Link>
       </li>
-    </>
+    </div>
   );
 
   return (

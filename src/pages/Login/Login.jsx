@@ -1,37 +1,43 @@
-
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Providers/AuthProvider";
+
 import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Login = () => {
-  const [error, setError] = useState(null);
-const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
   const { signIn, googleSignIn, updateUserProfile } = useContext(AuthContext);
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-   const handleLogin = (event) => {
-     event.preventDefault();
-     const form = event.target;
-     const email = form.email.value;
-     const password = form.password.value;
-     console.log(email, password);
-     signIn(email, password).then((result) => {
-       const user = result.user;
-       console.log(user);
-       Swal.fire({
-         title: "User Login Successful.",
-         showClass: {
-           popup: "animate__animated animate__fadeInDown",
-         },
-         hideClass: {
-           popup: "animate__animated animate__fadeOutUp",
-         },
-       });
-       navigate(from, { replace: true });
-     });
-   };
+  const handleLogin = (data) => {
+    signIn(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        Swal.fire({
+          title: "User Login Successful.",
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
+        });
+        navigate("/", { replace: true }); // Redirect to the home page
+      })
+      .catch((error) => {
+        setError("loginError", { message: error.message });
+      });
+  };
+
   return (
     <>
       <div className="hero min-h-screen bg-stone-200">
@@ -45,20 +51,25 @@ const navigate = useNavigate();
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm bg-stone-700  shadow-2xl">
             <h1 className="text-5xl font-bold text-center text-stone-500">
-              Please Login !
+              Please Login!
             </h1>
-            <form onSubmit={handleLogin} className="card-body rounded-lg">
+            <form
+              onSubmit={handleSubmit(handleLogin)}
+              className="card-body rounded-lg"
+            >
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
                 <input
                   type="email"
-                  name="email"
+                  {...register("email", { required: "Email is required." })}
                   placeholder="email"
                   className="input input-bordered"
-                  required
                 />
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -66,11 +77,15 @@ const navigate = useNavigate();
                 </label>
                 <input
                   type="password"
+                  {...register("password", {
+                    required: "Password is required.",
+                  })}
                   placeholder="password"
-                  name="password"
                   className="input input-bordered"
-                  required
                 />
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
@@ -98,7 +113,9 @@ const navigate = useNavigate();
                 </button>
               </div>
             </form>
-            {error && <p className="text-red-500">{error}</p>}
+            {errors.loginError && (
+              <p className="text-red-500">{errors.loginError.message}</p>
+            )}
 
             <span className="p-5 text-white">
               New to this Website?

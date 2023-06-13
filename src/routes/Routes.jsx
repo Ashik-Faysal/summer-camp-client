@@ -5,7 +5,7 @@ import Login from "../pages/Login/Login";
 import SignUp from "../pages/Login/SignUp";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import PopularInstructors from "../pages/Home/PopularInstructors";
-import PopularClasses from "../pages/Home/PopularClasses";
+import SelectedClass from "../pages/Shared/SelectedClass";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/classes",
-        element: <PopularClasses />,
+        element: <SelectedClass />,
       },
       {
         path: "/login",

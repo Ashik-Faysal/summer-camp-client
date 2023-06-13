@@ -1,50 +1,68 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
-  const { user, createUser, updateUserProfile } = useContext(AuthContext);
-  const [passwordError, setPasswordError] = useState("");
-  const navigate = useNavigate()
+  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+    reset,
+    clearErrors,
+  } = useForm();
 
-  const handleRegister = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const photoURL = form.photoURL.value;
-    console.log(name, email, password, photoURL);
+  const handleRegister = (data) => {
+    const { name, email, password, photoURL } = data;
 
     // Password validation checks
     if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
+      setError("password", {
+        message: "Password must be at least 6 characters long.",
+      });
       return;
     }
 
     if (!/[A-Z]/.test(password)) {
-      setPasswordError("Password must contain at least one capital letter.");
+      setError("password", {
+        message: "Password must contain at least one capital letter.",
+      });
       return;
     }
 
     if (!/[!@#$%^&*]/.test(password)) {
-      setPasswordError("Password must contain at least one special character.");
+      setError("password", {
+        message: "Password must contain at least one special character.",
+      });
       return;
     }
 
     // Clear password error if all checks pass
-    setPasswordError("");
+    clearErrors("password");
 
     createUser(email, password)
       .then((result) => {
         updateUserProfile(name, photoURL);
         const loggedUser = result.user;
         console.log(loggedUser);
-        navigate("/") // Navigate to the "/" page
-        form.reset();
+        navigate("/"); // Navigate to the "/" page
+        reset();
+
+        Swal.fire({
+          title: "Success!",
+          text: "Registration Successful.",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 2000,
+        });
       })
       .catch((error) => console.log(error));
   };
+
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col">
@@ -63,18 +81,20 @@ const SignUp = () => {
             ></iframe>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-black">
-            <form onSubmit={handleRegister} className="card-body">
+            <form onSubmit={handleSubmit(handleRegister)} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
                 </label>
                 <input
                   type="text"
-                  name="name"
+                  {...register("name", { required: "Name is required." })}
                   placeholder="name"
                   className="input input-bordered"
-                  required
                 />
+                {errors.name && (
+                  <p className="text-red-500">{errors.name.message}</p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -82,11 +102,13 @@ const SignUp = () => {
                 </label>
                 <input
                   type="email"
-                  name="email"
+                  {...register("email", { required: "Email is required." })}
                   placeholder="email"
                   className="input input-bordered"
-                  required
                 />
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -94,11 +116,13 @@ const SignUp = () => {
                 </label>
                 <input
                   type="text"
-                  name="photoURL"
+                  {...register("photoURL")}
                   placeholder="photo url"
                   className="input input-bordered"
-                  required
                 />
+                {errors.photoURL && (
+                  <p className="text-red-500">{errors.photoURL.message}</p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -106,13 +130,14 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
+                  {...register("password", {
+                    required: "Password is required.",
+                  })}
                   placeholder="password"
-                  name="password"
                   className="input input-bordered"
-                  required
                 />
-                {passwordError && (
-                  <p className="text-red-500">{passwordError}</p>
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
                 )}
                 <label className="label">
                   <Link

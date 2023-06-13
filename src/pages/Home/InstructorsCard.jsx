@@ -1,7 +1,7 @@
 import React from 'react';
 
 const InstructorsCard = ({ instructor }) => {
-    console.log(instructor);
+    // console.log(instructor);
     const { name, image, email, students} = 
         instructor;
   return (
