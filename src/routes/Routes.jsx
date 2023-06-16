@@ -11,6 +11,7 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminRoute from "./AdminRoute";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
+import InstructorDash from "../pages/Dashboard/InstructorDash";
 
 export const router = createBrowserRouter([
   {
@@ -48,8 +49,10 @@ export const router = createBrowserRouter([
         path: "userhome",
         element: <UserHome/>,
       },
-      
-     
+      {
+        path: "instructors",
+        element:<InstructorDash/>
+      },
       // admin routes
       {
         path: "adminhome",

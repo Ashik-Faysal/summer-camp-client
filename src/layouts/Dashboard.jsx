@@ -36,11 +36,15 @@ const Dashboard = () => {
                   <FaHome></FaHome> Admin Home
                 </NavLink>
               </li>
-              
-            
+
               <li>
                 <NavLink to="/dashboard/allusers">
                   <FaUsers></FaUsers> All Users
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/instructors">
+                  Instructor DashBoard
                 </NavLink>
               </li>
             </>
@@ -51,16 +55,8 @@ const Dashboard = () => {
                   <FaHome></FaHome> User Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/">
-                  <FaCalendarAlt></FaCalendarAlt> Reservations
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/">
-                  <FaWallet></FaWallet> Payment History
-                </NavLink>
-              </li>
+              
+             
               <li>
                 <NavLink to="/dashboard/classes">
                   <FaShoppingCart></FaShoppingCart> My Cart
