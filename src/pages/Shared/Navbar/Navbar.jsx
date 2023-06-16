@@ -1,12 +1,16 @@
-
-
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { useTheme } from "next-themes";
+
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [selectedClasses, setSelectedClasses] = useState([]);
+  const { theme, setTheme } = useTheme();
+    const toggleTheme = () => {
+      setTheme(theme === "dark" ? "light" : "dark");
+    };
 
   useEffect(() => {
     const storedClasses =
@@ -117,6 +121,11 @@ const NavBar = () => {
               </li>
             </>
           )}
+          <button className="btn btn-outline" onClick={toggleTheme}>
+            {theme === "dark"
+              ? "Light Mode"
+              : "Dark Mode"}
+          </button>
         </div>
       </div>
     </>

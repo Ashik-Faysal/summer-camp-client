@@ -1,161 +1,104 @@
-import useAuth from "../../../hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const AdminHome = () => {
-  const { user } = useAuth();
-  const [axiosSecure] = useAxiosSecure();
+  const [classes, setClasses] = useState([]);
 
-  const { data: stats = {} } = useQuery({
-    queryKey: ["admin-stats"],
-    queryFn: async () => {
-      const res = await axiosSecure("/admin-stats");
-      return res.data;
-    },
-  });
+  useEffect(() => {
+    fetchClasses();
+  }, []);
 
-  const { data: chartData = [] } = useQuery({
-    queryKey: ["chart-data"],
-    queryFn: async () => {
-      const res = await axiosSecure("/order-stats");
-      return res.data;
-    },
-  });
-
-  const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "red", "pink"];
-
-  const getPath = (x, y, width, height) => {
-    return `M${x},${y + height}C${x + width / 3},${y + height} ${
-      x + width / 2
-    },${y + height / 3}
-    ${x + width / 2}, ${y}
-    C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${
-      x + width
-    }, ${y + height}
-    Z`;
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get("/classes");
+      setClasses(response.data);
+    } catch (error) {
+      console.error("Failed to fetch classes", error);
+    }
   };
 
-  const TriangleBar = (props) => {
-    const { fill, x, y, width, height } = props;
-
-    return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+  const handleApprove = async (classId) => {
+    try {
+      await axios.patch(`/classes/${classId}`, { status: "approved" });
+      fetchClasses();
+    } catch (error) {
+      console.error("Failed to approve class", error);
+    }
   };
 
-  const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const handleDeny = async (classId) => {
+    try {
+      await axios.patch(`/classes/${classId}`, { status: "denied" });
+      fetchClasses();
+    } catch (error) {
+      console.error("Failed to deny class", error);
+    }
+  };
 
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
+  const handleSendFeedback = async (classId) => {
+    const feedback = prompt("Enter feedback for the instructor:");
+    if (feedback) {
+      try {
+        await axios.post(`/classes/${classId}/feedback`, { feedback });
+        fetchClasses();
+      } catch (error) {
+        console.error("Failed to send feedback", error);
+      }
+    }
   };
 
   return (
-    <div className="w-full m-4">
-      <h2 className="text-3xl">Hi, {user.displayName}</h2>
-      <div className="stats shadow">
-        <div className="stat">
-          <div className="stat-figure text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-8 h-8 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-          </div>
-          <div className="stat-title">Revenue</div>
-          <div className="stat-value">${stats.revenue}</div>
-          <div className="stat-desc">Jan 1st - Feb 1st</div>
-        </div>
-
-        <div className="stat">
-          <div className="stat-figure text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-8 h-8 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              ></path>
-            </svg>
-          </div>
-          <div className="stat-title">New Users</div>
-          <div className="stat-value">{stats.users}</div>
-          <div className="stat-desc">↗︎ 400 (22%)</div>
-        </div>
-        <div className="stat">
-          <div className="stat-figure text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-8 h-8 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              ></path>
-            </svg>
-          </div>
-          <div className="stat-title">Menu Items</div>
-          <div className="stat-value">{stats.products}</div>
-          <div className="stat-desc">↗︎ 400 (22%)</div>
-        </div>
-
-        <div className="stat">
-          <div className="stat-figure text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="inline-block w-8 h-8 stroke-current"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-              ></path>
-            </svg>
-          </div>
-          <div className="stat-title">Orders</div>
-          <div className="stat-value">{stats.orders}</div>
-          <div className="stat-desc">↘︎ 90 (14%)</div>
-        </div>
-      </div>
-      
+    <div>
+      <h2>Manage Classes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Class Image</th>
+            <th>Class Name</th>
+            <th>Instructor Name</th>
+            <th>Instructor Email</th>
+            <th>Available Seats</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {classes.map((classItem) => (
+            <tr key={classItem._id}>
+              <td>
+                <img src={classItem.classImage} alt={classItem.className} />
+              </td>
+              <td>{classItem.className}</td>
+              <td>{classItem.instructorName}</td>
+              <td>{classItem.instructorEmail}</td>
+              <td>{classItem.availableSeats}</td>
+              <td>{classItem.price}</td>
+              <td>{classItem.status}</td>
+              <td>
+                <button
+                  onClick={() => handleApprove(classItem._id)}
+                  disabled={classItem.status !== "pending"}
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => handleDeny(classItem._id)}
+                  disabled={classItem.status !== "pending"}
+                >
+                  Deny
+                </button>
+                <button
+                  onClick={() => handleSendFeedback(classItem._id)}
+                  disabled={classItem.status !== "approved"}
+                >
+                  Send Feedback
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
