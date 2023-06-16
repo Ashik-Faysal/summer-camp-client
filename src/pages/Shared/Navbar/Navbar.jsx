@@ -1,16 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useTheme } from "next-themes";
-
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const { theme, setTheme } = useTheme();
-    const toggleTheme = () => {
-      setTheme(theme === "dark" ? "light" : "dark");
-    };
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   useEffect(() => {
     const storedClasses =
@@ -44,7 +45,7 @@ const NavBar = () => {
   };
 
   const navOptions = (
-    <div className="md:flex items-center">
+    <>
       <li>
         <Link to="/">Home</Link>
       </li>
@@ -60,15 +61,23 @@ const NavBar = () => {
       <li>
         <Link to="/dashboard">DashBoard</Link>
       </li>
-    </div>
+    </>
   );
+
+  const toggleMobileMenu = () => {
+    setShowMobileMenu((prevShowMobileMenu) => !prevShowMobileMenu);
+  };
 
   return (
     <>
       <div className="navbar fixed z-10 bg-opacity-30 max-w-screen-2xl bg-black text-white">
         <div className="navbar-start">
           <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+            <label
+              tabIndex={0}
+              className="btn btn-ghost lg:hidden"
+              onClick={toggleMobileMenu}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -84,12 +93,11 @@ const NavBar = () => {
                 />
               </svg>
             </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              {navOptions}
-            </ul>
+            {showMobileMenu && (
+              <ul className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                {navOptions}
+              </ul>
+            )}
           </div>
           <a className="btn btn-ghost text-orange-500 normal-case text-xl">
             Summer Camp
@@ -122,9 +130,7 @@ const NavBar = () => {
             </>
           )}
           <button className="btn btn-outline" onClick={toggleTheme}>
-            {theme === "dark"
-              ? "Light Mode"
-              : "Dark Mode"}
+            {theme === "dark" ? "Light Mode" : "Dark Mode"}
           </button>
         </div>
       </div>
