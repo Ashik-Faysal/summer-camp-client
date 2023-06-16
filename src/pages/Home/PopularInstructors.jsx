@@ -4,7 +4,9 @@ import InstructorsCard from './InstructorsCard';
 const PopularInstructors = () => {
   const [instructors, setInstructors] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/instructor")
+    fetch(
+      "https://summer-camp-school-server-ashik-faysal.vercel.app/instructor"
+    )
       .then((res) => res.json())
       .then((data) => {
         // console.log(data);

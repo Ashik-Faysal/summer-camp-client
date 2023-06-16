@@ -1,17 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../../Providers/AuthProvider";
 
+
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
-    const [selectedClasses, setSelectedClasses] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
 
- useEffect(() => {
-   const storedClasses =
-     JSON.parse(localStorage.getItem("selectedClasses")) || [];
-   setSelectedClasses(storedClasses);
- }, []);
+  useEffect(() => {
+    const storedClasses =
+      JSON.parse(localStorage.getItem("selectedClasses")) || [];
+    setSelectedClasses(storedClasses);
+  }, []);
+
+  useEffect(() => {
+    const updateBadgeCount = () => {
+      setSelectedClasses((prevClasses) => {
+        const storedClasses =
+          JSON.parse(localStorage.getItem("selectedClasses")) || [];
+        if (prevClasses.length !== storedClasses.length) {
+          return storedClasses;
+        }
+        return prevClasses;
+      });
+    };
+
+    window.addEventListener("storage", updateBadgeCount);
+
+    return () => {
+      window.removeEventListener("storage", updateBadgeCount);
+    };
+  }, []);
+
   const handleLogOut = () => {
     logOut()
       .then(() => {})
@@ -33,7 +54,7 @@ const NavBar = () => {
         </Link>
       </li>
       <li>
-        <Link>DashBoard</Link>
+        <Link to="/dashboard">DashBoard</Link>
       </li>
     </div>
   );

@@ -1,19 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 const PopularClasses = () => {
   const [classes, setClasses] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/classes")
+    fetch("https://summer-camp-school-server-ashik-faysal.vercel.app/classes")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setClasses(data);
       })
       .catch((error) => {
         console.error("Error fetching popular classes:", error);
       });
+  }, []);
+
+  useEffect(() => {
+    const storedClasses =
+      JSON.parse(localStorage.getItem("selectedClasses")) || [];
+    const storedIds = storedClasses.map((item) => item._id);
+    setSelectedIds(storedIds);
   }, []);
 
   const handleSelected = (item) => {
@@ -32,10 +40,12 @@ const PopularClasses = () => {
 
       // Store the updated array back in local storage
       localStorage.setItem("selectedClasses", JSON.stringify(selectedClasses));
+
+      // Update selectedIds state
+      const updatedIds = [...selectedIds, item._id];
+      setSelectedIds(updatedIds);
     }
   };
-
-
 
   return (
     <>
@@ -64,8 +74,9 @@ const PopularClasses = () => {
                   <button
                     onClick={() => handleSelected(item)}
                     className="btn btn-primary"
+                    disabled={selectedIds.includes(item._id)}
                   >
-                    Select
+                    {selectedIds.includes(item._id) ? "Selected" : "Select"}
                   </button>
                 )}
               </div>

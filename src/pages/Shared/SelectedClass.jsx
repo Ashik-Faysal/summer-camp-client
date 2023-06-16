@@ -1,6 +1,5 @@
-
-
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const SelectedClass = () => {
   const [selectedClasses, setSelectedClasses] = useState([]);
@@ -19,10 +18,20 @@ const SelectedClass = () => {
     return totalPrice;
   };
 
+  const handleDelete = (itemId) => {
+    const updatedClasses = selectedClasses.filter(
+      (item) => item._id !== itemId
+    );
+    setSelectedClasses(updatedClasses);
+    localStorage.setItem("selectedClasses", JSON.stringify(updatedClasses));
+  };
+
   return (
     <>
+      <Helmet>
+        <title>Summer camp | Classes</title>
+      </Helmet>
       <div>
-       {/* <PopularClasses handleSelected={handleSelected} /> */}
         <h1 className="text-5xl font-bold text-orange-500 my-8 text-center">
           Selected Classes
         </h1>
@@ -37,6 +46,7 @@ const SelectedClass = () => {
                   <th>Instructor Name</th>
                   <th>Available Seats</th>
                   <th>Price</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -46,6 +56,14 @@ const SelectedClass = () => {
                     <td>{item.instructorName}</td>
                     <td>{item.availableSeats}</td>
                     <td>{item.price}$</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
