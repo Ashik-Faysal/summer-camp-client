@@ -7,6 +7,10 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import PopularInstructors from "../pages/Home/PopularInstructors";
 import SelectedClass from "../pages/Shared/SelectedClass";
 import Dashboard from "../layouts/Dashboard";
+import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
+import UserHome from "../pages/Dashboard/UserHome/UserHome";
+import AdminRoute from "./AdminRoute";
+import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -39,7 +43,30 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
-
-    
-  }
+    children: [
+      {
+        path: "userhome",
+        element: <UserHome/>,
+      },
+      
+     
+      // admin routes
+      {
+        path: "adminhome",
+        element: (
+          <AdminRoute>
+            <AdminHome/>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "allusers",
+        element: (
+          <AdminRoute>
+            <AllUsers/>
+          </AdminRoute>
+        ),
+      },
+    ],
+  },
 ]);

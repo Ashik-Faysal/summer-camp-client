@@ -36,22 +36,8 @@ const Dashboard = () => {
                   <FaHome></FaHome> Admin Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/dashboard/addItem">
-                  {" "}
-                  <FaUtensils></FaUtensils> Add an Item
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/dashboard/manageitems">
-                  <FaWallet></FaWallet> Manage Items
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/">
-                  <FaBook></FaBook> Manage Bookings(not implemented)
-                </NavLink>
-              </li>
+              
+            
               <li>
                 <NavLink to="/dashboard/allusers">
                   <FaUsers></FaUsers> All Users
@@ -76,7 +62,7 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/mycart">
+                <NavLink to="/dashboard/classes">
                   <FaShoppingCart></FaShoppingCart> My Cart
                   <span className="badge inl badge-secondary">
                     +{cart?.length || 0}
@@ -90,13 +76,7 @@ const Dashboard = () => {
           <li>
             <NavLink to="/">
               <FaHome></FaHome> Home
-            </NavLink>{" "}
-          </li>
-          <li>
-            <NavLink to="/menu"> Our Menu</NavLink>
-          </li>
-          <li>
-            <NavLink to="/order/salad">Order Food</NavLink>
+            </NavLink>
           </li>
         </ul>
       </div>
